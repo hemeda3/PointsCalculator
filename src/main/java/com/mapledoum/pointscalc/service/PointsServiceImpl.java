@@ -12,12 +12,14 @@ import com.mapledoum.pointscalc.model.ApiResponseDTO;
 import com.mapledoum.pointscalc.model.PointsRuleConfig;
 import com.mapledoum.pointscalc.repository.CustomerRepository;
 import com.mapledoum.pointscalc.repository.TransactionRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import static com.mapledoum.pointscalc.utils.PointsUtils.CUSTOMER_NOT_EXISTS;
 
 @Service
+@Slf4j
 public class PointsServiceImpl implements IPointsService {
 
 
@@ -47,6 +49,7 @@ public class PointsServiceImpl implements IPointsService {
 				.sum();
 
 
+		log.info("found total trannsaction : {} for customer: {} ", totalsofAllMonths, customerId);
 
 
 		ApiResponseDTO responseDTO =
@@ -55,7 +58,7 @@ public class PointsServiceImpl implements IPointsService {
 				.total(totalsofAllMonths)
 				.build();
 
- 		System.out.println(responseDTO.toString());
+
 		return responseDTO;
 	}
 	public ApiResponseDTO calcPointsForMonth(Long customerId, LocalDate month) {
@@ -78,14 +81,17 @@ public class PointsServiceImpl implements IPointsService {
 	private void checkCustomerOrThrow(Long customerId) {
 		Customer customer = customerRepository.findCustomerByCustID(customerId);
 
+		log.debug("trying to check customer {}", customerId);
 		if(customer == null)
 		{
+			log.error("Error while retrieving customer info {}", customerId);
 			throw new NoRecordFoundException(CUSTOMER_NOT_EXISTS);
 		}
 	}
 
 
 	public int calcTierPointsByThresholdForTransaction(Transaction transaction) {
+
 
 		List<PointsRuleConfig> ruleConfigs = loadRules();
 
@@ -94,7 +100,6 @@ public class PointsServiceImpl implements IPointsService {
 						rule.getTier2MultiplierPoints(),
 						transaction.getTransAmounnt()))
 				.sum();
-		System.out.println("calc for "+transaction.getTransAmounnt() +" tot "+result);
 
 
 		return result;
