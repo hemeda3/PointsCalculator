@@ -27,15 +27,22 @@ public class PointsSimulation extends Simulation {
 
             )
             .exec(session -> session);
+    ScenarioBuilder calcPointsByRange = scenario("PointsCalcByRange")
+            .exec(http("PointsPerMonth")
+                    .get("/customers/9999/points?from=1999-10-10&to=2999-10-10")
+                    .check(status().is(200))
+                    .check(jsonPath("$.total").is("220").saveAs("totalForRange"))
 
+            )
+            .exec(session -> session);
 
 
     {
 
 
         setUp(
-                calcPointsBySingleMonth.injectOpen(atOnceUsers(5))
-
+                calcPointsBySingleMonth.injectOpen(atOnceUsers(10))
+                        .andThen(calcPointsByRange.injectOpen(atOnceUsers(10)))
         ).protocols(httpProtocol)
                 .assertions(
                         // Assert that the max response time of all requests is less than 100 ms

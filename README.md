@@ -31,8 +31,11 @@
 #### curl calcPointsMonthRange
 - ```curl --location --request GET 'http://localhost:8080/customers/9999/points?from=1999-10-10&to=2999-10-10' ```
 
-
-![Gatling Results](screenshots/gatlingResults.png?raw=true "Title")
+#### Swagger UI
+![Swagger UI](screenshots/gatlingResults.png?raw=true "Title")
+#### Gatling Results
+![Gatling Results1](screenshots/gat3.png?raw=true "Title")
+![Gatling Results2](screenshots/gat2.png?raw=true "Title")
 
 
 
