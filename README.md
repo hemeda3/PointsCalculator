@@ -17,7 +17,7 @@
 </pre>
 
 ##### To run the unit+integration test testing: execute 
-- ` ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev `
+- ` ./mvnw test `
 
 ##### To run the performance (Gatling) testing: execute 
 - `  ./mvnw  gatling:test -Dgatling.simulationClass=performance.com.mapledoum.pointscalc.pointsapp.PointsSimulation -Dmaven.test.skip=true `
